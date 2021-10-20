@@ -83,6 +83,13 @@ my_pres <-
   ph_with(value = long_heb_text, location = ph_location_label(ph_label = "text")) %>% 
   ph_with(value = "4", location = ph_location_label(ph_label = "page_number")) %>% 
   
+  add_slide(layout = "layout_full_plot_with_text", master = "Office Theme") %>% 
+  ph_with(value = "2.5", location = ph_location_label(ph_label = "num")) %>%  
+  ph_with(value = short_heb_text, location = ph_location_label(ph_label = "title_text")) %>% 
+  ph_with(value = short_heb_text, location = ph_location_label(ph_label = "text")) %>% 
+  ph_with(value = rvg::dml(ggobj = plot_gg, bg = "transparent"), location = ph_location_label(ph_label = "plot")) %>% 
+  ph_with(value = "5", location = ph_location_label(ph_label = "page_number")) %>% 
+
   add_slide(layout = "empty_page", master = "Office Theme")
 
 
