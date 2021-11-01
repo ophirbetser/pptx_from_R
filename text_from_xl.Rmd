@@ -1,0 +1,106 @@
+---
+  title: "pptx_for_doch_2020"
+author: "Ophir Betser"
+date: "10/18/2021"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+  
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+pacman::p_load(
+  data.table,
+  tidyverse,
+  rvg,
+  xlsx,
+  officer
+  )
+```
+
+```{r}
+plot_gg <- 
+  iris %>% 
+  ggplot() +
+  aes(Sepal.Length,Sepal.Width, color = Species) +
+  geom_point() +
+  theme_bw() +
+  labs(
+    title = "Title",
+    subtitle = "SubTitle",
+    color = ""
+  ) +
+  theme(
+    legend.position = "top"
+  )
+```
+
+```{r}
+text_dt <- 
+  as.data.table(
+  read.xlsx(
+    "/Users/ophirbetser/Ophir/R PROJECTS/pptx_from_R/text_for_pptx.xlsx",
+    1
+  )
+  )
+
+names(text_dt)
+text_dt[page == "1", header]
+text_dt[page == "1", title]
+text_dt[page == "1", page]
+
+```
+
+
+```{r}
+read_pptx(here::here("pptx_tempalte.pptx")) %>%
+  officer::layout_properties()
+```
+
+```{r}
+my_pres <- 
+  read_pptx(here::here("pptx_tempalte_for_heb.pptx")) %>% 
+  remove_slide(index = 1) %>%  
+  
+  add_slide(layout = "front_page", master = "Office Theme") %>% 
+  
+  add_slide(layout = "intro_page", master = "Office Theme") %>% 
+  
+  add_slide(layout = "layout_full_plot", master = "Office Theme") %>% 
+  ph_with(value = text_dt[page == "1", header], location = ph_location_label(ph_label = "num")) %>%  
+  ph_with(value = text_dt[page == "1", title], location = ph_location_label(ph_label = "text")) %>% 
+  ph_with(value = rvg::dml(ggobj = plot_gg, bg = "transparent"), location =  ph_location_label(ph_label = "plot")) %>% 
+  ph_with(value = text_dt[page == "1", page], location = ph_location_label(ph_label = "page_number")) %>% 
+  
+  add_slide(layout = "layout_half", master = "Office Theme") %>% 
+  ph_with(value = text_dt[page == "2", header], location = ph_location_label(ph_label = "num")) %>%  
+  ph_with(value = text_dt[page == "2", text], location = ph_location_label(ph_label = "text")) %>% 
+  ph_with(value = rvg::dml(ggobj = plot_gg, bg = "transparent"), location = ph_location_label(ph_label = "plot")) %>% 
+  ph_with(value = text_dt[page == "2", page], location = ph_location_label(ph_label = "page_number")) %>% 
+  
+  add_slide(layout = "layout_75", master = "Office Theme") %>% 
+  ph_with(value = text_dt[page == "3", header], location = ph_location_label(ph_label = "num")) %>%  
+  ph_with(value = text_dt[page == "3", text], location = ph_location_label(ph_label = "text")) %>% 
+  ph_with(value = rvg::dml(ggobj = plot_gg, bg = "transparent"), location = ph_location_label(ph_label = "plot")) %>% 
+  ph_with(value = text_dt[page == "3", page], location = ph_location_label(ph_label = "page_number")) %>% 
+  
+  add_slide(layout = "layout_full_text", master = "Office Theme") %>% 
+  ph_with(value = text_dt[page == "4", header], location = ph_location_label(ph_label = "num")) %>%  
+  ph_with(value = text_dt[page == "4", title], location = ph_location_label(ph_label = "header")) %>% 
+  ph_with(value = text_dt[page == "4", text], location = ph_location_label(ph_label = "text")) %>% 
+  ph_with(value = text_dt[page == "4", page], location = ph_location_label(ph_label = "page_number")) %>% 
+  
+  add_slide(layout = "layout_full_plot_with_text", master = "Office Theme") %>% 
+  ph_with(value = text_dt[page == "5", header], location = ph_location_label(ph_label = "num")) %>%  
+  ph_with(value = text_dt[page == "5", title], location = ph_location_label(ph_label = "title_text")) %>% 
+  ph_with(value = text_dt[page == "5", text], location = ph_location_label(ph_label = "text")) %>% 
+  ph_with(value = rvg::dml(ggobj = plot_gg, bg = "transparent"), location = ph_location_label(ph_label = "plot")) %>% 
+  ph_with(value = text_dt[page == "5", page], location = ph_location_label(ph_label = "page_number")) %>% 
+
+  add_slide(layout = "empty_page", master = "Office Theme")
+
+
+
+print(my_pres, here::here(glue::glue("pptx_from_R_{Sys.Date()}.pptx")))
+```
