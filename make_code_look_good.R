@@ -78,7 +78,7 @@ add_sld <- function(pers_obj, layout_name, plot_name = NULL, page_num = NULL){
   }
 }
 
-# bulid the output
+# bulid the output ----
 my_pres <- 
   add_sld(my_pres, "front_page") %>% 
   add_sld("intro_page") %>% 
@@ -112,5 +112,5 @@ my_pres <-
   
 
 # save pptx ----
-output_name <- "my_pes"
+output_name <- "ophir_is_cool"
 print(my_pres, here::here(glue::glue("{output_name}_{Sys.Date()}.pptx")))
