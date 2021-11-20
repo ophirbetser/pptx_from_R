@@ -24,16 +24,16 @@ plot_gg <-
 text_dt <- 
   as.data.table(
     read.xlsx(
-      "/Users/ophirbetser/Ophir/R PROJECTS/pptx_from_R/text_for_pptx.xlsx",
+      here::here("text_files", "text_for_pptx.xlsx"),
       1
     )
   )
-
+list.files()
 #--------------------#
 
 # load temple ----
 my_pres <- 
-  read_pptx(here::here("pptx_tempalte_for_heb.pptx")) %>% 
+  read_pptx(here::here("pptx_templates", "pptx_tempalte_for_heb.pptx")) %>% 
   remove_slide(index = 1)
 
 # add slide from template function ----
@@ -113,4 +113,4 @@ my_pres <-
 
 # save pptx ----
 output_name <- "ophir_is_cool"
-print(my_pres, here::here(glue::glue("{output_name}_{Sys.Date()}.pptx")))
+print(my_pres, here::here("outputs", glue::glue("{output_name}_{Sys.Date()}.pptx")))
