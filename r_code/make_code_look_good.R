@@ -28,7 +28,7 @@ text_dt <-
       1
     )
   )
-list.files()
+
 #--------------------#
 
 # load temple ----
