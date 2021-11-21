@@ -29,6 +29,8 @@ text_dt <-
     )
   )
 
+text_dt$page_number <- as.character(text_dt$page_number)
+
 #--------------------#
 
 # load temple ----
